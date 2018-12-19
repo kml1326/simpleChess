@@ -70,7 +70,7 @@ var possibleMovesObj = {
   bishop: findPossibleBishopPos,
   rook: findPossibleRookPos,
   knight: findPossibleKnightPos,
-  // king: findPossibleKingPos,
+  king: findPossibleKingPos,
   queen: findPossibleQueenPos,
 }
 
@@ -106,10 +106,6 @@ rows.forEach((row, i) => {
   })
 });
 
-function findPossiblePawnPos(obj) {
-
-}
-
 // 2 col, 1 row
 // 2 row, 1 col
 function findPossibleKnightPos(obj) { // 'A4'
@@ -141,34 +137,69 @@ function findPossibleKnightPos(obj) { // 'A4'
 
 function findPossiblePawnPos(obj) {
 
-}
+  var potentialPos = [];
+  var indexOfObjCol = columns.indexOf(obj.col);
 
-// new Piece("bishop","white",5,"B");
+  var oneJump;
+  var twoJump;
 
-// function findPossibleBishopPos(obj) {
-//   var potentialPos = [];
+  if (obj.color == black) {
+    oneJump = 1;
+    twoJump = 2;
+  } else {
+    oneJump = -1;
+    twoJump = -2;
+  }
 
-//   var indexOfObjCol = columns.indexOf(obj.col);
+  if (obj.color === 'black') {
 
-//   var potentialColumns = [];
+    if (obj.timesMoved === 0) {
+      potentialPos.push(obj.col + (Number(obj.row) - 1));
+      potentialPos.push(obj.col + (Number(obj.row) - 2));
+    } else {
+      potentialPos.push(obj.col + (Number(obj.row) - 1));
+    }
+    if (columns[indexOfObjCol + 1] + (Number(obj.row) - 1)) {
+      let pieceColor = checkCellPieceColor(cells[columns[indexOfObjCol + 1] + (Number(obj.row) - 1)]);
+      if (pieceColor) {
+        if (pieceColor == obj.color) return;
+        else potentialPos.push(columns[indexOfObjCol + 1] + (Number(obj.row) - 1));
+      }
+    }
+    if (columns[indexOfObjCol - 1] + (Number(obj.row) - 1)) {
+      let pieceColor = checkCellPieceColor(cells[columns[indexOfObjCol - 1] + (Number(obj.row) - 1)])
+      if (pieceColor) {
+        if (pieceColor == obj.color) return;
+        else potentialPos.push(columns[indexOfObjCol - 1] + (Number(obj.row) - 1));
+      }
+    }
 
-//   columns.forEach((col, index) => {
-//     if ((index - indexOfObjCol) !== 0) {
-//       potentialColumns.push(col);
-//     }
-//   });
-//   console.log(potentialColumns);
+  } else {
 
-//   potentialColumns.forEach((col, index) => {
-//     rows.forEach(row => {
-//       (Math.abs(columns.indexOf(obj.col) - columns.indexOf(col)) == Math.abs(obj.row-row)) ? potentialPos.push(col + row) : null;
-//     })
-//   });
+    if (obj.timesMoved === 0) {
+      potentialPos.push(obj.col + (Number(obj.row) + 1));
+      potentialPos.push(obj.col + (Number(obj.row) + 2));
+    } else {
+      potentialPos.push(obj.col + (Number(obj.row) + 1));
+    }
+    if (columns[indexOfObjCol + 1] + (Number(obj.row) + 1)) {
+      let pieceColor = checkCellPieceColor(cells[columns[indexOfObjCol + 1] + (Number(obj.row) + 1)])
+      if (pieceColor) {
+        if (pieceColor == obj.color) return;
+        else potentialPos.push(columns[indexOfObjCol + 1] + (Number(obj.row) + 1));
+      }
+    }
+    if (columns[indexOfObjCol - 1] + (Number(obj.row) + 1)) {
+      let pieceColor = checkCellPieceColor(cells[columns[indexOfObjCol - 1] + (Number(obj.row) + 1)])
+      if (pieceColor) {
+        if (pieceColor == obj.color) return;
+        else potentialPos.push(columns[indexOfObjCol - 1] + (Number(obj.row) + 1));
+      }
+    }
 
-//   return potentialPos;
-// }
+  }
 
-function findPossiblePawnPos(obj) {
+  return potentialPos;
 
 }
 
@@ -277,7 +308,7 @@ function findPossibleRookPos(obj) {
 function Piece(name, color, row, col, type) {
   this.name = name;
   this.color = color;
-  this.type = type
+  this.type = type;
   this.row = row;
   this.col = col;
   this.timesMoved = 0;
@@ -362,57 +393,25 @@ function findPossibleBishopPos(obj) {
 
   var indexOfObjCol = columns.indexOf(obj.col);
 
-  //for top-Left
-  for (let c = indexOfObjCol - 1, r = obj.row - 1; c > 0 && r > 0; c--, r--) {
-    let CellPcolor = checkCellPieceColor(cells[columns[c] + r]);
-    if (!CellPcolor) {
-      potentialPos.push(columns[c] + r);
-    } else {
-      if (CellPcolor !== obj.color) {
-        potentialPos.push(columns[c] + r)
-      };
-      break;
+  var directions = [
+    [indexOfObjCol - 1, obj.row - 1, -1, -1],
+    [indexOfObjCol + 1, obj.row - 1, +1, -1],
+    [indexOfObjCol - 1, obj.row + 1, -1, +1],
+    [indexOfObjCol + 1, obj.row + 1, +1, +1],
+  ]
+  directions.forEach(val => {
+    for (let c = val[0], r = val[1]; c > 0 && r > 0 && c < 8 && r < 8; c += val[2], r += val[3]) {
+      let CellPcolor = checkCellPieceColor(cells[columns[c] + r]);
+      if (!CellPcolor) {
+        potentialPos.push(columns[c] + r);
+      } else {
+        if (CellPcolor !== obj.color) {
+          potentialPos.push(columns[c] + r)
+        };
+        break;
+      }
     }
-  }
-
-  // //top Right
-  for (let c = indexOfObjCol + 1, r = obj.row - 1; c < 8 && r > 0; c++, r--) {
-    let CellPcolor = checkCellPieceColor(cells[columns[c] + r]);
-    if (!CellPcolor) {
-      potentialPos.push(columns[c] + r);
-    } else {
-      if (CellPcolor !== obj.color) {
-        potentialPos.push(columns[c] + r)
-      };
-      break;
-    }
-  }
-
-  // //bottom-left
-  for (let c = indexOfObjCol - 1, r = obj.row + 1; r < 8 && c > 0; c--, r++) {
-    let CellPcolor = checkCellPieceColor(cells[columns[c] + r]);
-    if (!CellPcolor) {
-      potentialPos.push(columns[c] + r);
-    } else {
-      if (CellPcolor !== obj.color) {
-        potentialPos.push(columns[c] + r)
-      };
-      break;
-    }
-  }
-
-  //   //bottom right
-  for (let c = indexOfObjCol + 1, r = obj.row + 1; c < 8 && r < 8; c++, r++) {
-    let CellPcolor = checkCellPieceColor(cells[columns[c] + r]);
-    if (!CellPcolor) {
-      potentialPos.push(columns[c] + r);
-    } else {
-      if (CellPcolor !== obj.color) {
-        potentialPos.push(columns[c] + r)
-      };
-      break;
-    }
-  }
+  });
 
   return potentialPos;
 }
