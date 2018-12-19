@@ -328,7 +328,8 @@ function Piece(name, color, row, col, type) {
   this.updatePossibleMoves = function() {
       this.possiblePositions = possibleMovesObj[this.type](this);
       this.possiblePositions.forEach((item) => {
-        document.getElementById(item).classList.add('.highlight')
+        console.log(document.getElementById(item))
+        document.getElementById(item).classList.add('highlight')
       })
 
     }
