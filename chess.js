@@ -94,7 +94,7 @@ function assignPiece(row, col) {
 
 rows.forEach((row, i) => {
   columns.forEach((col, j) => {
-
+    
     var cell = {
       color: (i + j) % 2 == 0 ? 'white' : 'black',
       row: row,
@@ -110,26 +110,52 @@ rows.forEach((row, i) => {
 // 2 row, 1 col
 function findPossibleKnightPos(obj) { // 'A4'
 
-  var potentialPos = [];
+var potentialPos = [];
 
   var indexOfObjCol = columns.indexOf(obj.col);
 
-  var potentialColumns = [];
+var potentialColumns = [];
 
+columns.forEach((col, index) => {
+  if(Math.abs(index - indexOfObjCol) <= 2 && Math.abs(index - indexOfObjCol) !== 0) {
+    potentialColumns.push(col);
+  }
+});
+
+potentialColumns.forEach((col, index) => {
+  if(Math.abs(columns.indexOf(col) - indexOfObjCol) == 2) {
+    (rows.indexOf(obj.row-1) !== -1) ? potentialPos.push(col + (obj.row-1)) : null;
+    (rows.indexOf(obj.row+1) !== -1) ? potentialPos.push(col + (obj.row+1)) : null;
+  } else {
+    (rows.indexOf(obj.row-2) !== -1) ? potentialPos.push(col + (obj.row-2)) : null;
+    (rows.indexOf(obj.row+2) !== -1) ? potentialPos.push(col + (obj.row+2)) : null;
+  }
+});
+
+return potentialPos;
+}
+
+// new Piece("bishop","white",5,"B");
+
+function findPossibleBishopPos(obj) {
+  var potentialPos = [];
+  
+  var indexOfObjCol = columns.indexOf(obj.col);
+  
+  var potentialColumns = [];
+  
   columns.forEach((col, index) => {
-    if (Math.abs(index - indexOfObjCol) <= 2 && Math.abs(index - indexOfObjCol) !== 0) {
+    if ((index - indexOfObjCol) !== 0) {
       potentialColumns.push(col);
     }
   });
-
+  console.log(potentialColumns);
+  
   potentialColumns.forEach((col, index) => {
-    if (Math.abs(columns.indexOf(col) - indexOfObjCol) == 2) {
-      (rows.indexOf(obj.row - 1) !== -1) ? potentialPos.push(col + (obj.row - 1)): null;
-      (rows.indexOf(obj.row + 1) !== -1) ? potentialPos.push(col + (obj.row + 1)): null;
-    } else {
-      (rows.indexOf(obj.row - 2) !== -1) ? potentialPos.push(col + (obj.row - 2)): null;
-      (rows.indexOf(obj.row + 2) !== -1) ? potentialPos.push(col + (obj.row + 2)): null;
-    }
+    rows.forEach(row => {
+      // console.log(Math.abs(col.indexOf(obj.col) - col.indexOf(col)) , Math.abs(obj.row-row))
+      (Math.abs(columns.indexOf(obj.col) - columns.indexOf(col)) == Math.abs(obj.row-row)) ? potentialPos.push(col + row) : null;
+    })
   });
 
   return potentialPos;
@@ -138,21 +164,42 @@ function findPossibleKnightPos(obj) { // 'A4'
 function findPossiblePawnPos(obj) {
 
   var potentialPos = [];
+  var indexOfObjRow = rows.indexOf(obj.row);
+  var indexOfObjCol = columns.indexOf(obj.col);
   
   if(obj.color === 'black') {
+    console.log(columns[indexOfObjCol + 1] + (Number(obj.row) - 1), columns[indexOfObjCol - 1] + (Number(obj.row) - 1))
     if(obj.timesMoved === 0) {
       potentialPos.push(obj.col + (Number(obj.row) - 1));
       potentialPos.push(obj.col + (Number(obj.row) - 2));
     } else {
       potentialPos.push(obj.col + (Number(obj.row) - 1));
     }
+    if(columns[indexOfObjCol + 1] + (Number(obj.row) - 1)) {
+      potentialPos.push(columns[indexOfObjCol + 1] + (Number(obj.row) - 1));
+    }
+    if(columns[indexOfObjCol - 1] + (Number(obj.row) - 1)) {
+      potentialPos.push(columns[indexOfObjCol - 1] + (Number(obj.row) - 1));
+    }
+    
+   
+
   } else {
+    console.log(columns[indexOfObjCol + 1] + (Number(obj.row) + 1), columns[indexOfObjCol - 1] + (Number(obj.row) + 1))
     if(obj.timesMoved === 0) {
       potentialPos.push(obj.col + (Number(obj.row) + 1));
       potentialPos.push(obj.col + (Number(obj.row) + 2));
     } else {
       potentialPos.push(obj.col + (Number(obj.row) + 1));
     }
+    if(columns[indexOfObjCol + 1] + (Number(obj.row) + 1)) {
+      potentialPos.push(columns[indexOfObjCol + 1] + (Number(obj.row) + 1));
+    }
+    if(columns[indexOfObjCol - 1] + (Number(obj.row) + 1)) {
+      potentialPos.push(columns[indexOfObjCol - 1] + (Number(obj.row) + 1));
+    }
+    
+    
   }
 
   return potentialPos;
