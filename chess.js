@@ -252,16 +252,28 @@ function findPossibleRookPos(obj) {
   //   []
   // ]
 
+  // // Column back
+  // for (let colOff = -1, rowOff = 0; colOff >= 0; colOff--) {
+  //   let pieceColor = checkCellPieceColor(cells[columns[colOff] + obj.row]);
+  //   if (cells[columns[indexOfObjCol + colOff] + (obj.row + rowOff)].piece) {
+  //     if (pieceColor != obj.color) {
+  //       potentialPos.push(columns[colOff] + (obj.row + rowOff))
+  //     }
+  //     break;
+  //   }
+  //   potentialPos.push(columns[colOff] + obj.row)
+  // }
+
   // Column back
-  for (let colOff = -1, rowOff = 0; colOff >= 0; colOff--) {
-    let pieceColor = checkCellPieceColor(cells[columns[colOff] + obj.row]);
-    if (cells[columns[indexOfObjCol + colOff] + (obj.row + rowOff)].piece) {
+  for (let i = indexOfObjCol - 1; i >= 8; i--) {
+    let pieceColor = checkCellPieceColor(cells[columns[i] + obj.row]);
+    if (cells[columns[i] + obj.row].piece) {
       if (pieceColor != obj.color) {
-        potentialPos.push(columns[colOff] + (obj.row + rowOff))
+        potentialPos.push(columns[i] + obj.row)
       }
       break;
     }
-    potentialPos.push(columns[colOff] + obj.row)
+    potentialPos.push(columns[i] + obj.row)
   }
 
   // Column forward
@@ -328,6 +340,7 @@ function Piece(name, color, row, col, type) {
     this.possiblePositions = possibleMovesObj[this.type](this);
     if (!this.possiblePositions.includes(pos)) {
       console.log("invalid move", this, pos);
+
       return;
     }
     var currentPos = this.col + this.row;
