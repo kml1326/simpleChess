@@ -147,12 +147,33 @@ function findPossibleQueenPos(obj) {
   var potentialPos = [];
   var indexOfObjCol = columns.indexOf(obj.col);
 
-  var rowCells = columns.filter(item => item != obj.col).forEach((ele) => {
-    potentialPos.push(ele + row);
+  // Rook like movement
+  columns.filter(item => item != obj.col).forEach((ele) => {
+    potentialPos.push(ele + obj.row);
   });
 
+  rows.filter(item => item != obj.row).forEach((ele) => {
+    potentialPos.push(obj.col + ele);
+  });
+
+  // Bishop like movement
 
 
+
+  return potentialPos;
+}
+
+function findPossibleRookPos(obj) {
+  var potentialPos = [];
+  var indexOfObjCol = columns.indexOf(obj.col);
+  console.log(obj.col)
+  columns.filter(item => item != obj.col).forEach((ele) => {
+    potentialPos.push(ele + obj.row);
+  });
+
+  rows.filter(item => item != obj.row).forEach((ele) => {
+    potentialPos.push(obj.col + ele);
+  });
 
   return potentialPos;
 }
