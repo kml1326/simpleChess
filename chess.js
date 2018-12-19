@@ -70,7 +70,7 @@ var possibleMovesObj = {
   bishop: findPossibleBishopPos,
   rook: findPossibleRookPos,
   knight: findPossibleKnightPos,
-  king: findPossibleKingPos,
+  // king: findPossibleKingPos,
   queen: findPossibleQueenPos,
 }
 
