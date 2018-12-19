@@ -189,7 +189,7 @@ function findPossibleQueenPos(obj) {
 function Piece(name, color, row, col, type) {
   this.name = name;
   this.color = color;
-  this.type = type
+  this.type = type;
   this.row = row;
   this.col = col;
   this.timesMoved = 0;
@@ -269,45 +269,22 @@ function findPossibleBishopPos(obj) {
 
   var indexOfObjCol = columns.indexOf(obj.col);
 
-  //for top-Left
-  for (let c = indexOfObjCol - 1, r = obj.row - 1; c > 0 && r > 0; c-- , r--) {
-    let CellPcolor = checkCellPieceColor(cells[columns[c] + r]);
-    if (!CellPcolor) {potentialPos.push(columns[c] + r);}
-    else {
-      if (CellPcolor !== obj.color) {potentialPos.push(columns[c] + r)};
-      break;
+  var directions = [
+    [indexOfObjCol - 1, obj.row - 1, -1, -1],
+    [indexOfObjCol + 1, obj.row - 1, +1, -1],
+    [indexOfObjCol - 1, obj.row + 1, -1, +1],
+    [indexOfObjCol + 1, obj.row + 1, +1, +1],
+  ]
+  directions.forEach(val => {
+    for (let c = val[0], r = val[1]; c > 0 && r > 0 && c < 8 && r < 8; c += val[2], r += val[3]) {
+      let CellPcolor = checkCellPieceColor(cells[columns[c] + r]);
+      if (!CellPcolor) { potentialPos.push(columns[c] + r); }
+      else {
+        if (CellPcolor !== obj.color) { potentialPos.push(columns[c] + r) };
+        break;
+      }
     }
-  }
-
-// //top Right
-  for (let c = indexOfObjCol + 1, r = obj.row - 1; c <8 && r > 0; c++ , r--) {
-    let CellPcolor = checkCellPieceColor(cells[columns[c] + r]);
-    if (!CellPcolor) {potentialPos.push(columns[c] + r);}
-    else {
-      if (CellPcolor !== obj.color) {potentialPos.push(columns[c] + r)};
-      break;
-    }
-  }
-
-// //bottom-left
-  for (let c = indexOfObjCol - 1, r = obj.row + 1; r < 8 && c > 0; c-- , r++) {
-    let CellPcolor = checkCellPieceColor(cells[columns[c] + r]);
-    if (!CellPcolor) {potentialPos.push(columns[c] + r);}
-    else {
-      if (CellPcolor !== obj.color) {potentialPos.push(columns[c] + r)};
-      break;
-    }
-  }
-
-//   //bottom right
-  for (let c = indexOfObjCol + 1, r = obj.row + 1; c < 8 && r < 8; c++ , r++) {
-    let CellPcolor = checkCellPieceColor(cells[columns[c] + r]);
-    if (!CellPcolor) {potentialPos.push(columns[c] + r);}
-    else {
-      if (CellPcolor !== obj.color) {potentialPos.push(columns[c] + r)};
-      break;
-    }
-  }
+  });
 
   return potentialPos;
 }
