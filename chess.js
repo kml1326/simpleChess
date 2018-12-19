@@ -36,14 +36,14 @@ var INIT_WHITE = {
   'F1': 'bishop',
   'G1': 'knight',
   'H1': 'rook',
-  // 'A2': 'pawn',
-  // 'B2': 'pawn',
-  // 'C2': 'pawn',
-  // 'D2': 'pawn',
-  // 'E2': 'pawn',
-  // 'F2': 'pawn',
-  // 'G2': 'pawn',
-  // 'H2': 'pawn',
+  'A2': 'pawn',
+  'B2': 'pawn',
+  'C2': 'pawn',
+  'D2': 'pawn',
+  'E2': 'pawn',
+  'F2': 'pawn',
+  'G2': 'pawn',
+  'H2': 'pawn',
 }
 
 var INIT_BLACK = {
@@ -55,14 +55,14 @@ var INIT_BLACK = {
   'F8': 'bishop',
   'G8': 'knight',
   'H8': 'rook',
-  // 'A7': 'pawn',
-  // 'B7': 'pawn',
-  // 'C7': 'pawn',
-  // 'D7': 'pawn',
-  // 'E7': 'pawn',
-  // 'F7': 'pawn',
-  // 'G7': 'pawn',
-  // 'H7': 'pawn',
+  'A7': 'pawn',
+  'B7': 'pawn',
+  'C7': 'pawn',
+  'D7': 'pawn',
+  'E7': 'pawn',
+  'F7': 'pawn',
+  'G7': 'pawn',
+  'H7': 'pawn',
 }
 
 var possibleMovesObj = {
@@ -125,10 +125,10 @@ function findPossibleKnightPos(obj) { // 'A4'
   potentialColumns.forEach((col, index) => {
     if (Math.abs(columns.indexOf(col) - indexOfObjCol) == 2) {
       (rows.indexOf(obj.row - 1) !== -1) ? potentialPos.push(col + (obj.row - 1)): null;
-      (rows.indexOf(obj.row + 1) !== -1) ? potentialPos.push(col + (obj.row + 1)): null;
+      (rows.indexOf(+obj.row + 1) !== -1) ? potentialPos.push(col + (+obj.row + 1)): null;
     } else {
       (rows.indexOf(obj.row - 2) !== -1) ? potentialPos.push(col + (obj.row - 2)): null;
-      (rows.indexOf(obj.row + 2) !== -1) ? potentialPos.push(col + (obj.row + 2)): null;
+      (rows.indexOf(+obj.row + 2) !== -1) ? potentialPos.push(col + (+obj.row + 2)): null;
     }
   });
 
@@ -143,7 +143,7 @@ function findPossiblePawnPos(obj) {
   var oneJump;
   var twoJump;
 
-  if (obj.color == black) {
+  if (obj.color == "black") {
     oneJump = 1;
     twoJump = 2;
   } else {
