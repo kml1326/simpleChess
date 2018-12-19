@@ -66,9 +66,9 @@ var INIT_BLACK = {
 }
 
 var possibleMovesObj = {
-  // pawn: findPossiblePawnPos,
+  pawn: findPossiblePawnPos,
   // bishop: findPossibleBishopPos,
-  // rook: findPossibleRookPos,
+  rook: findPossibleRookPos,
   knight: findPossibleKnightPos,
   // king: findPossibleKingPos,
   queen: findPossibleQueenPos,
@@ -94,7 +94,6 @@ function assignPiece(row, col) {
 
 rows.forEach((row, i) => {
   columns.forEach((col, j) => {
-    
     var cell = {
       color: (i + j) % 2 == 0 ? 'white' : 'black',
       row: row,
@@ -107,62 +106,61 @@ rows.forEach((row, i) => {
 });
 
 function findPossiblePawnPos(obj) {
-  
+
 }
 
 // 2 col, 1 row
 // 2 row, 1 col
 function findPossibleKnightPos(obj) { // 'A4'
 
-var potentialPos = [];
+  var potentialPos = [];
 
   var indexOfObjCol = columns.indexOf(obj.col);
 
-var potentialColumns = [];
+  var potentialColumns = [];
 
-columns.forEach((col, index) => {
-  if(Math.abs(index - indexOfObjCol) <= 2 && Math.abs(index - indexOfObjCol) !== 0) {
-    potentialColumns.push(col);
-  }
-});
+  columns.forEach((col, index) => {
+    if (Math.abs(index - indexOfObjCol) <= 2 && Math.abs(index - indexOfObjCol) !== 0) {
+      potentialColumns.push(col);
+    }
+  });
 
-potentialColumns.forEach((col, index) => {
-  if(Math.abs(columns.indexOf(col) - indexOfObjCol) == 2) {
-    (rows.indexOf(obj.row-1) !== -1) ? potentialPos.push(col + (obj.row-1)) : null;
-    (rows.indexOf(obj.row+1) !== -1) ? potentialPos.push(col + (obj.row+1)) : null;
-  } else {
-    (rows.indexOf(obj.row-2) !== -1) ? potentialPos.push(col + (obj.row-2)) : null;
-    (rows.indexOf(obj.row+2) !== -1) ? potentialPos.push(col + (obj.row+2)) : null;
-  }
-});
+  potentialColumns.forEach((col, index) => {
+    if (Math.abs(columns.indexOf(col) - indexOfObjCol) == 2) {
+      (rows.indexOf(obj.row - 1) !== -1) ? potentialPos.push(col + (obj.row - 1)): null;
+      (rows.indexOf(obj.row + 1) !== -1) ? potentialPos.push(col + (obj.row + 1)): null;
+    } else {
+      (rows.indexOf(obj.row - 2) !== -1) ? potentialPos.push(col + (obj.row - 2)): null;
+      (rows.indexOf(obj.row + 2) !== -1) ? potentialPos.push(col + (obj.row + 2)): null;
+    }
+  });
 
-return potentialPos;
+  return potentialPos;
 }
 
 function findPossiblePawnPos(obj) {
-  
+
 }
 
 // new Piece("bishop","white",5,"B");
 
 function findPossibleBishopPos(obj) {
   var potentialPos = [];
-  
+
   var indexOfObjCol = columns.indexOf(obj.col);
-  
+
   var potentialColumns = [];
-  
+
   columns.forEach((col, index) => {
     if ((index - indexOfObjCol) !== 0) {
       potentialColumns.push(col);
     }
   });
-  console.log(potentialColumns);
-  
+
   potentialColumns.forEach((col, index) => {
     rows.forEach(row => {
       // console.log(Math.abs(col.indexOf(obj.col) - col.indexOf(col)) , Math.abs(obj.row-row))
-      (Math.abs(columns.indexOf(obj.col) - columns.indexOf(col)) == Math.abs(obj.row-row)) ? potentialPos.push(col + row) : null;
+      (Math.abs(columns.indexOf(obj.col) - columns.indexOf(col)) == Math.abs(obj.row - row)) ? potentialPos.push(col + row): null;
     })
   });
 
@@ -187,23 +185,76 @@ function findPossibleQueenPos(obj) {
   });
 
   // Bishop like movement
+  var potentialColumns = [];
 
+  columns.forEach((col, index) => {
+    if ((index - indexOfObjCol) !== 0) {
+      potentialColumns.push(col);
+    }
+  });
 
-
+  potentialColumns.forEach((col, index) => {
+    rows.forEach(row => {
+      // console.log(Math.abs(col.indexOf(obj.col) - col.indexOf(col)) , Math.abs(obj.row-row))
+      (Math.abs(columns.indexOf(obj.col) - columns.indexOf(col)) == Math.abs(obj.row - row)) ? potentialPos.push(col + row): null;
+    })
+  });
   return potentialPos;
 }
 
 function findPossibleRookPos(obj) {
   var potentialPos = [];
   var indexOfObjCol = columns.indexOf(obj.col);
-  console.log(obj.col)
-  columns.filter(item => item != obj.col).forEach((ele) => {
-    potentialPos.push(ele + obj.row);
-  });
+  // columns.filter(item => item != obj.col).forEach((ele) => {
+  //   potentialPos.push(ele + obj.row);
+  // });
 
-  rows.filter(item => item != obj.row).forEach((ele) => {
-    potentialPos.push(obj.col + ele);
-  });
+  // rows.filter(item => item != obj.row).forEach((ele) => {
+  //   potentialPos.push(obj.col + ele);
+  // });
+
+  var directions = [
+    [indexOfObjCol - 1, 0, -1],
+    [],
+    [],
+    []
+  ]
+
+  // Column back
+  for (let i = indexOfObjCol - 1; i >= 0; i--) {
+    if (cells[columns[i] + obj.row].piece) {
+      break;
+    }
+    potentialPos.push(columns[i] + obj.row)
+  }
+
+  // Column forward
+  for (let i = indexOfObjCol + 1; i < 8; i++) {
+    if (cells[columns[i] + obj.row].piece) {
+      break;
+    }
+    potentialPos.push(columns[i] + obj.row)
+  }
+
+  // Row up;
+  for (let i = obj.row - 1; i >= 1; i--) {
+    if (cells[obj.col + i].piece) {
+      break;
+    }
+    potentialPos.push(obj.col + i)
+  }
+
+  // Row down;
+  // debugger;
+  console.log(obj.row)
+  var rowNumber = Number(obj.row)
+  for (let i = rowNumber + 1; i <= 8; i++) {
+    console.log(i, obj.col + i)
+    if (cells[obj.col + i].piece) {
+      break;
+    }
+    potentialPos.push(obj.col + i)
+  }
 
   return potentialPos;
 }
