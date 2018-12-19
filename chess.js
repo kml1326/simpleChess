@@ -315,6 +315,10 @@ function Piece(name, color, row, col, type) {
   this.possiblePositions = [];
   this.updatePossibleMoves = function() {
       this.possiblePositions = possibleMovesObj[this.type](this);
+      this.possiblePositions.forEach((item) => {
+        document.getElementById(item).classList.add('.highlight')
+      })
+
     }
     // position - A1
     // check for validity of move
@@ -322,8 +326,8 @@ function Piece(name, color, row, col, type) {
   this.move = function(pos) {
     // TODO:check the validity of move.
     this.possiblePositions = possibleMovesObj[this.type](this);
-    if (!this.possiblePositions.includes(pos)){
-      console.log("invalid move",this,pos);
+    if (!this.possiblePositions.includes(pos)) {
+      console.log("invalid move", this, pos);
       return;
     }
     var currentPos = this.col + this.row;
@@ -398,17 +402,20 @@ function findPossibleBishopPos(obj) {
   var indexOfObjRow = rows.indexOf(+obj.row);
 
   var directions = [
-    [ + 1,  + 1],
-    [ + 1,  - 1],
-    [ - 1,  + 1],
-    [ - 1,  - 1],
+    [+1, +1],
+    [+1, -1],
+    [-1, +1],
+    [-1, -1],
   ]
   directions.forEach(val => {
     for (let c = indexOfObjCol + val[0], r = indexOfObjRow + val[1]; c >= 0 && r >= 0 && c < 8 && r < 8; c += val[0], r += val[1]) {
       let CellPcolor = checkCellPieceColor(cells[columns[c] + rows[r]]);
-      if (!CellPcolor) { potentialPos.push(columns[c] + rows[r]); }
-      else {
-        if (CellPcolor !== obj.color) { potentialPos.push(columns[c] + rows[r]) };
+      if (!CellPcolor) {
+        potentialPos.push(columns[c] + rows[r]);
+      } else {
+        if (CellPcolor !== obj.color) {
+          potentialPos.push(columns[c] + rows[r])
+        };
         break;
       }
     }
