@@ -131,6 +131,11 @@ function findPossibleKnightPos(obj) { // 'A4'
       (rows.indexOf(+obj.row + 2) !== -1) ? potentialPos.push(col + (+obj.row + 2)): null;
     }
   });
+  potentialPos = potentialPos.reduce((acc,v) => {
+    if(!checkCellPieceColor(cells[v])) acc.push(v);
+    else if (checkCellPieceColor(cells[v]) !== obj.color) acc.push(v);
+    return acc;
+  },[]);
 
   return potentialPos;
 }
