@@ -66,7 +66,7 @@ var INIT_BLACK = {
 }
 
 var possibleMovesObj = {
-  // pawn: findPossiblePawnPos,
+  pawn: findPossiblePawnPos,
   // bishop: findPossibleBishopPos,
   // rook: findPossibleRookPos,
   knight: findPossibleKnightPos,
@@ -106,10 +106,6 @@ rows.forEach((row, i) => {
   })
 });
 
-function findPossiblePawnPos(obj) {
-
-}
-
 // 2 col, 1 row
 // 2 row, 1 col
 function findPossibleKnightPos(obj) { // 'A4'
@@ -140,6 +136,26 @@ function findPossibleKnightPos(obj) { // 'A4'
 }
 
 function findPossiblePawnPos(obj) {
+
+  var potentialPos = [];
+  
+  if(obj.color === 'black') {
+    if(obj.timesMoved === 0) {
+      potentialPos.push(obj.col + (Number(obj.row) - 1));
+      potentialPos.push(obj.col + (Number(obj.row) - 2));
+    } else {
+      potentialPos.push(obj.col + (Number(obj.row) - 1));
+    }
+  } else {
+    if(obj.timesMoved === 0) {
+      potentialPos.push(obj.col + (Number(obj.row) + 1));
+      potentialPos.push(obj.col + (Number(obj.row) + 2));
+    } else {
+      potentialPos.push(obj.col + (Number(obj.row) + 1));
+    }
+  }
+
+  return potentialPos;
 
 }
 
